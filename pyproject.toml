@@ -1,0 +1,46 @@
+[tool.poetry]
+name = "consentchain"
+version = "1.0.0"
+description = "DPDP Act compliant consent management system on Algorand"
+authors = ["AlgoBharat Hack Series 3.0"]
+readme = "README.md"
+packages = [{include = "consentchain", from = "."}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pyteal = "^0.29.0"
+py-algorand-sdk = "^2.5.0"
+fastapi = "^0.109.0"
+uvicorn = "^0.27.0"
+pydantic = "^2.5.0"
+python-dotenv = "^1.0.0"
+cryptography = "^42.0.0"
+pyjwt = "^2.8.0"
+httpx = "^0.26.0"
+redis = "^5.0.0"
+sqlalchemy = "^2.0.0"
+asyncpg = "^0.29.0"
+alembic = "^1.13.0"
+passlib = "^1.7.4"
+python-multipart = "^0.0.6"
+jinja2 = "^3.1.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+pytest-asyncio = "^0.23.0"
+pytest-cov = "^4.1.0"
+black = "^24.1.0"
+ruff = "^0.2.0"
+mypy = "^1.8.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
