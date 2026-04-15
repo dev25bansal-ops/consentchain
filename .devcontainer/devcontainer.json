@@ -1,0 +1,136 @@
+{
+  "name": "ConsentChain Development",
+  "dockerComposeFile": [
+    "docker-compose.yml",
+    "docker-compose.devcontainer.yml"
+  ],
+  "service": "devcontainer",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+
+  "image": "mcr.microsoft.com/devcontainers/python:3.11-bullseye",
+
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers-contrib/features/poetry:2": {
+      "version": "latest"
+    }
+  },
+
+  "forwardPorts": [8000, 5432, 6379, 3000, 5173],
+
+  "portsAttributes": {
+    "8000": {
+      "label": "ConsentChain API",
+      "onAutoForward": "notify"
+    },
+    "5432": {
+      "label": "PostgreSQL",
+      "onAutoForward": "silent"
+    },
+    "6379": {
+      "label": "Redis",
+      "onAutoForward": "silent"
+    },
+    "3000": {
+      "label": "Admin Portal",
+      "onAutoForward": "notify"
+    },
+    "5173": {
+      "label": "Dashboard",
+      "onAutoForward": "notify"
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.black-formatter",
+        "ms-python.mypy-type-checker",
+        "charliermarsh.ruff",
+        "ms-azuretools.vscode-docker",
+        "ms-vscode.vscode-typescript-next",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "ms-vscode-remote.remote-containers",
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-pg",
+        "rangav.vscode-thunder-client",
+        "github.vscode-github-actions",
+        "oderwat.indent-rainbow",
+        "streetsidesoftware.code-spell-checker"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.linting.enabled": true,
+        "python.linting.ruffEnabled": true,
+        "python.formatting.provider": "black",
+        "python.formatting.blackArgs": ["--line-length", "100"],
+        "python.testing.pytestEnabled": true,
+        "python.testing.pytestArgs": ["tests/", "-v"],
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": "explicit"
+        },
+        "[python]": {
+          "editor.defaultFormatter": "ms-python.black-formatter",
+          "editor.tabSize": 4
+        },
+        "[typescript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.tabSize": 2
+        },
+        "[javascript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.tabSize": 2
+        },
+        "files.exclude": {
+          "**/__pycache__": true,
+          "**/.pytest_cache": true,
+          "**/.ruff_cache": true,
+          "**/*.pyc": true
+        },
+        "files.watcherExclude": {
+          "**/.git/objects/**": true,
+          "**/.git/subtree-cache/**": true,
+          "**/node_modules/*/**": true,
+          "**/__pycache__/**": true
+        }
+      }
+    }
+  },
+
+  "postCreateCommand": "make install && make migrate && echo 'Dev container ready!'",
+
+  "postStartCommand": "echo 'Dev container started'",
+
+  "remoteEnv": {
+    "DATABASE_URL": "postgresql+asyncpg://consentchain:consentchain@postgres:5432/consentchain",
+    "REDIS_URL": "redis://redis:6379/0",
+    "ALGORAND_NETWORK": "testnet",
+    "ENVIRONMENT": "development",
+    "TESTING": "false",
+    "LOG_LEVEL": "DEBUG",
+    "OTEL_ENABLED": "false",
+    "CORS_ORIGINS": "http://localhost:3000,http://localhost:5173,http://localhost:8000"
+  },
+
+  "containerEnv": {
+    "PYTHONUNBUFFERED": "1",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+
+  "remoteUser": "vscode",
+
+  "updateRemoteUserUID": true
+}

@@ -1,0 +1,35 @@
+name: Dependency Review
+
+on:
+  pull_request:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v3
+        with:
+          fail-on-severity: high
+          deny-licenses: GPL-3.0, AGPL-3.0
+      
+      - name: Python dependency check
+        run: |
+          pip install safety
+          pip install -r requirements.txt
+          safety check --json
+      
+      - name: Node dependency check
+        run: |
+          cd dashboard-v2
+          npm audit --audit-level=high
+          cd ../admin-portal
+          npm audit --audit-level=high

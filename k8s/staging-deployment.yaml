@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consentchain-api-staging
+  labels:
+    app: consentchain-api
+    environment: staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: consentchain-api
+      environment: staging
+  template:
+    metadata:
+      labels:
+        app: consentchain-api
+        environment: staging
+    spec:
+      containers:
+      - name: api
+        image: ghcr.io/consentchain/consentchain-api:develop
+        ports:
+        - containerPort: 8000
+        env:
+        - name: ENVIRONMENT
+          value: "staging"
+        - name: TESTING
+          value: "false"
+        - name: LOG_LEVEL
+          value: "DEBUG"
+        envFrom:
+        - secretRef:
+            name: consentchain-staging-secrets
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "2"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consentchain-api-staging
+spec:
+  selector:
+    app: consentchain-api
+    environment: staging
+  ports:
+  - port: 80
+    targetPort: 8000
+  type: LoadBalancer

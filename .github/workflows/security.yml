@@ -1,0 +1,42 @@
+name: Security Audit
+
+on:
+  schedule:
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
+
+jobs:
+  security:
+    name: Security Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install bandit safety pip-audit
+          pip install -e .
+
+      - name: Run Bandit
+        run: bandit -r api/ core/ sdk/ -f json -o bandit-report.json
+        continue-on-error: true
+
+      - name: Run Safety
+        run: safety check --json
+        continue-on-error: true
+
+      - name: Run pip-audit
+        run: pip-audit --format json
+        continue-on-error: true
+
+      - name: Upload security reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-reports
+          path: |
+            bandit-report.json

@@ -1,0 +1,7 @@
+        """Deep link with only source param."""
+        url = "consentchain://dashboard?source=push"
+        parsed = fresh_mobile.parse_deep_link(url)
+
+        assert parsed.path == "dashboard"
+        assert parsed.source == "push"
+        assert parsed.params == {}

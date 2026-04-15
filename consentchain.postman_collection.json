@@ -1,0 +1,1173 @@
+{
+  "info": {
+    "name": "ConsentChain API",
+    "description": "DPDP Act Compliant Consent Management on Algorand - Complete API collection for v1.1.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.1.0"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "api_key",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "consent_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "fiduciary_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "principal_wallet",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "grievance_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health & Monitoring",
+      "item": [
+        {
+          "name": "Root",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": ["{{base_url}}"],
+              "path": [""]
+            }
+          }
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            }
+          }
+        },
+        {
+          "name": "Readiness Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/ready",
+              "host": ["{{base_url}}"],
+              "path": ["ready"]
+            }
+          }
+        },
+        {
+          "name": "Detailed Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health/detailed",
+              "host": ["{{base_url}}"],
+              "path": ["health", "detailed"]
+            }
+          }
+        },
+        {
+          "name": "Prometheus Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/metrics",
+              "host": ["{{base_url}}"],
+              "path": ["metrics"]
+            }
+          }
+        },
+        {
+          "name": "CSRF Token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/csrf-token",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "csrf-token"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login with Wallet",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/login?wallet_address={{principal_wallet}}&signature=<signature>&message=<message>",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "login"],
+              "query": [
+                { "key": "wallet_address", "value": "{{principal_wallet}}" },
+                { "key": "signature", "value": "<signature>" },
+                { "key": "message", "value": "<message>" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"<your_refresh_token>\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/refresh",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "refresh"]
+            }
+          }
+        },
+        {
+          "name": "Logout (Revoke Token)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"<your_token>\",\n  \"reason\": \"logout\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/logout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "OAuth2/OIDC",
+      "item": [
+        {
+          "name": "OAuth2 Login - Google",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/oauth/login/google?redirect_uri=http://localhost:3000/callback",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "oauth", "login", "google"],
+              "query": [
+                { "key": "redirect_uri", "value": "http://localhost:3000/callback" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "OAuth2 Callback",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/oauth/callback?code=<auth_code>&state=<state>",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "oauth", "callback"],
+              "query": [
+                { "key": "code", "value": "<auth_code>" },
+                { "key": "state", "value": "<state>" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Link OAuth Account",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"provider\": \"google\",\n  \"code\": \"<auth_code>\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/oauth/link",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "oauth", "link"]
+            }
+          }
+        },
+        {
+          "name": "Unlink OAuth Account",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/oauth/unlink/google",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "oauth", "unlink", "google"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Fiduciary Management",
+      "item": [
+        {
+          "name": "Register Fiduciary",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Fiduciary Corp\",\n  \"registration_number\": \"TFC-2024-001\",\n  \"contact_email\": \"contact@testfiduciary.com\",\n  \"data_categories\": [\"identity\", \"financial\"],\n  \"purposes\": [\"identity_verification\", \"credit_assessment\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/fiduciary/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "fiduciary", "register"]
+            }
+          }
+        },
+        {
+          "name": "Rotate API Key",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-API-Key", "value": "{{api_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/fiduciary/rotate-key",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "fiduciary", "rotate-key"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Consent Management",
+      "item": [
+        {
+          "name": "Create Consent",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-API-Key", "value": "{{api_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"principal_wallet\": \"{{principal_wallet}}\",\n  \"fiduciary_id\": \"{{fiduciary_id}}\",\n  \"purpose\": \"identity_verification\",\n  \"data_types\": [\"identity\", \"contact\"],\n  \"duration_days\": 365,\n  \"signature\": \"<wallet_signature>\",\n  \"metadata\": {\"source\": \"postman\"}\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/consent/create",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "consent", "create"]
+            }
+          }
+        },
+        {
+          "name": "Batch Create Consents",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-API-Key", "value": "{{api_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"batch_id\": \"batch_001\",\n  \"consents\": [\n    {\n      \"principal_wallet\": \"{{principal_wallet}}\",\n      \"fiduciary_id\": \"{{fiduciary_id}}\",\n      \"purpose\": \"identity_verification\",\n      \"data_types\": [\"identity\"],\n      \"duration_days\": 90,\n      \"signature\": \"<signature>\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/consent/batch",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "consent", "batch"]
+            }
+          }
+        },
+        {
+          "name": "Revoke Consent",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"consent_id\": \"{{consent_id}}\",\n  \"reason\": \"User requested revocation\",\n  \"signature\": \"<wallet_signature>\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/consent/revoke",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "consent", "revoke"]
+            }
+          }
+        },
+        {
+          "name": "Modify Consent",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"consent_id\": \"{{consent_id}}\",\n  \"new_purpose\": \"healthcare_services\",\n  \"new_data_types\": [\"health\", \"identity\"],\n  \"new_duration_days\": 180,\n  \"reason\": \"Purpose expansion\",\n  \"signature\": \"<signature>\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/consent/modify",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "consent", "modify"]
+            }
+          }
+        },
+        {
+          "name": "Verify Consent",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-API-Key", "value": "{{api_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"consent_id\": \"{{consent_id}}\",\n  \"principal_id\": \"{{principal_wallet}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/consent/verify",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "consent", "verify"]
+            }
+          }
+        },
+        {
+          "name": "Query Consents",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "X-API-Key", "value": "{{api_key}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/v1/consent/query?status=GRANTED&page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "consent", "query"],
+              "query": [
+                { "key": "status", "value": "GRANTED" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" },
+                { "key": "purpose", "value": "" },
+                { "key": "principal_id", "value": "" },
+                { "key": "from_date", "value": "" },
+                { "key": "to_date", "value": "" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Consent by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{jwt_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/v1/consent/{{consent_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "consent", "{{consent_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Get Consent History",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{jwt_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/v1/consent/{{consent_id}}/history",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "consent", "{{consent_id}}", "history"]
+            }
+          }
+        },
+        {
+          "name": "Get Expiring Consents",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{jwt_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/v1/consent/expiring?days=30",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "consent", "expiring"],
+              "query": [{ "key": "days", "value": "30" }]
+            }
+          }
+        },
+        {
+          "name": "Renew Consent",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"duration_days\": 365,\n  \"signature\": \"<signature>\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/consent/{{consent_id}}/renew",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "consent", "{{consent_id}}", "renew"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Audit & Compliance",
+      "item": [
+        {
+          "name": "Query Audit Logs",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-API-Key", "value": "{{api_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"page\": 1,\n  \"limit\": 20\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/audit/query",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "audit", "query"]
+            }
+          }
+        },
+        {
+          "name": "Generate Merkle Root",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-API-Key", "value": "{{api_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\"event_id_1\", \"event_id_2\"]"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/audit/merkle-root",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "audit", "merkle-root"]
+            }
+          }
+        },
+        {
+          "name": "Generate Compliance Report",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-API-Key", "value": "{{api_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fiduciary_id\": \"{{fiduciary_id}}\",\n  \"period_start\": \"2024-01-01T00:00:00Z\",\n  \"period_end\": \"2024-12-31T23:59:59Z\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/compliance/report",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "compliance", "report"]
+            }
+          }
+        },
+        {
+          "name": "Get Compliance Status",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "X-API-Key", "value": "{{api_key}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/v1/compliance/status/{{fiduciary_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "compliance", "status", "{{fiduciary_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Grievance Management",
+      "item": [
+        {
+          "name": "Submit Grievance",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"principal_id\": \"<principal_uuid>\",\n  \"fiduciary_id\": \"{{fiduciary_id}}\",\n  \"grievance_type\": \"unauthorized_access\",\n  \"subject\": \"Data accessed without consent\",\n  \"description\": \"My personal data was accessed by the fiduciary without proper consent verification. This violates DPDP Act provisions.\",\n  \"consent_id\": \"{{consent_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/grievance/submit",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "grievance", "submit"]
+            }
+          }
+        },
+        {
+          "name": "Acknowledge Grievance",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "X-API-Key", "value": "{{api_key}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/v1/grievance/{{grievance_id}}/acknowledge",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "grievance", "{{grievance_id}}", "acknowledge"]
+            }
+          }
+        },
+        {
+          "name": "Resolve Grievance",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "X-API-Key", "value": "{{api_key}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/v1/grievance/{{grievance_id}}/resolve?resolution=Investigation complete. No unauthorized access found.",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "grievance", "{{grievance_id}}", "resolve"],
+              "query": [
+                { "key": "resolution", "value": "Investigation complete. No unauthorized access found." }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Grievances",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "X-API-Key", "value": "{{api_key}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/v1/grievance/list?limit=50",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "grievance", "list"],
+              "query": [{ "key": "limit", "value": "50" }]
+            }
+          }
+        },
+        {
+          "name": "Check SLA Compliance",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "X-API-Key", "value": "{{api_key}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/v1/grievance/sla/{{fiduciary_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "grievance", "sla", "{{fiduciary_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Guardian Management",
+      "item": [
+        {
+          "name": "Register Guardian",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"principal_id\": \"<principal_uuid>\",\n  \"guardian_wallet\": \"<guardian_wallet_address>\",\n  \"guardian_name\": \"John Doe\",\n  \"relationship\": \"parent\",\n  \"relationship_proof_hash\": \"<hash>\",\n  \"signature\": \"<signature>\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/guardian/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "guardian", "register"]
+            }
+          }
+        },
+        {
+          "name": "Verify Guardian",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "X-API-Key", "value": "{{api_key}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/v1/guardian/{{guardian_id}}/verify",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "guardian", "{{guardian_id}}", "verify"]
+            }
+          }
+        },
+        {
+          "name": "Check Guardian Authorization",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/guardian/check?guardian_wallet=<wallet>&principal_id=<uuid>&action=data_access",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "guardian", "check"],
+              "query": [
+                { "key": "guardian_wallet", "value": "<wallet>" },
+                { "key": "principal_id", "value": "<uuid>" },
+                { "key": "action", "value": "data_access" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Data Deletion",
+      "item": [
+        {
+          "name": "Create Deletion Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"principal_id\": \"<principal_uuid>\",\n  \"fiduciary_id\": \"{{fiduciary_id}}\",\n  \"scope\": \"all\",\n  \"reason\": \"Right to erasure under DPDP Act\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/deletion/request",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "deletion", "request"]
+            }
+          }
+        },
+        {
+          "name": "Execute Deletion",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "X-API-Key", "value": "{{api_key}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/v1/deletion/{{request_id}}/execute",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "deletion", "{{request_id}}", "execute"]
+            }
+          }
+        },
+        {
+          "name": "Get Deletion Certificate",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/deletion/{{request_id}}/certificate",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "deletion", "{{request_id}}", "certificate"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Templates",
+      "item": [
+        {
+          "name": "List Templates",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/templates?language=en&category=healthcare",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "templates"],
+              "query": [
+                { "key": "language", "value": "en" },
+                { "key": "category", "value": "healthcare" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Render Template",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"template_id\": \"<template_uuid>\",\n  \"variables\": {\n    \"principal_name\": \"John Doe\",\n    \"fiduciary_name\": \"Test Corp\",\n    \"purpose\": \"Identity Verification\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/templates/render",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "templates", "render"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Generate DPDP Report (PDF)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "X-API-Key", "value": "{{api_key}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/v1/reports/dpdp?fiduciary_id={{fiduciary_id}}&period_start=2024-01-01T00:00:00Z&period_end=2024-12-31T23:59:59Z",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "reports", "dpdp"],
+              "query": [
+                { "key": "fiduciary_id", "value": "{{fiduciary_id}}" },
+                { "key": "period_start", "value": "2024-01-01T00:00:00Z" },
+                { "key": "period_end", "value": "2024-12-31T23:59:59Z" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Regulator Portal",
+      "item": [
+        {
+          "name": "Create Audit Request",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"request_type\": \"routine\",\n  \"fiduciary_id\": \"{{fiduciary_id}}\",\n  \"scope\": \"full\",\n  \"period_start\": \"2024-01-01T00:00:00Z\",\n  \"period_end\": \"2024-12-31T23:59:59Z\",\n  \"description\": \"Annual compliance audit\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/regulator/audit-request",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "regulator", "audit-request"]
+            }
+          }
+        },
+        {
+          "name": "Get Regulator Audit Trail",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/regulator/audit-trail/{{fiduciary_id}}?period_start=2024-01-01T00:00:00Z&period_end=2024-12-31T23:59:59Z",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "regulator", "audit-trail", "{{fiduciary_id}}"],
+              "query": [
+                { "key": "period_start", "value": "2024-01-01T00:00:00Z" },
+                { "key": "period_end", "value": "2024-12-31T23:59:59Z" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Verify Blockchain Integrity",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/regulator/integrity/{{fiduciary_id}}?period_start=2024-01-01T00:00:00Z&period_end=2024-12-31T23:59:59Z",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "regulator", "integrity", "{{fiduciary_id}}"],
+              "query": [
+                { "key": "period_start", "value": "2024-01-01T00:00:00Z" },
+                { "key": "period_end", "value": "2024-12-31T23:59:59Z" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "IPFS Evidence",
+      "item": [
+        {
+          "name": "Store Evidence on IPFS",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/ipfs/evidence?consent_id={{consent_id}}&principal_wallet={{principal_wallet}}&fiduciary_wallet=<wallet>&purpose=identity_verification&data_types=identity&data_types=contact&granted_at=2024-01-01T00:00:00Z&signature=<sig>",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "ipfs", "evidence"],
+              "query": [
+                { "key": "consent_id", "value": "{{consent_id}}" },
+                { "key": "principal_wallet", "value": "{{principal_wallet}}" },
+                { "key": "fiduciary_wallet", "value": "<wallet>" },
+                { "key": "purpose", "value": "identity_verification" },
+                { "key": "data_types", "value": "identity" },
+                { "key": "data_types", "value": "contact" },
+                { "key": "granted_at", "value": "2024-01-01T00:00:00Z" },
+                { "key": "signature", "value": "<sig>" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Retrieve Evidence",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/ipfs/evidence/{{cid}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "ipfs", "evidence", "{{cid}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Telemetry",
+      "item": [
+        {
+          "name": "Get Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/metrics",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "metrics"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Public Endpoints",
+      "item": [
+        {
+          "name": "List User Consents (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/public/consent/{{principal_wallet}}?status=GRANTED&page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "public", "consent", "{{principal_wallet}}"],
+              "query": [
+                { "key": "status", "value": "GRANTED" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create User Consent (Public)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fiduciary_id\": \"{{fiduciary_id}}\",\n  \"purpose\": \"identity_verification\",\n  \"data_types\": [\"identity\", \"contact\"],\n  \"duration_days\": 365,\n  \"principal_wallet\": \"{{principal_wallet}}\",\n  \"signature\": \"<signature>\",\n  \"metadata\": {\"source\": \"postman\"}\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/public/consent/create",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "public", "consent", "create"]
+            }
+          }
+        },
+        {
+          "name": "List Public Fiduciaries",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/public/fiduciaries",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "public", "fiduciaries"]
+            }
+          }
+        },
+        {
+          "name": "Submit Public Grievance",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fiduciary_id\": \"{{fiduciary_id}}\",\n  \"principal_wallet\": \"{{principal_wallet}}\",\n  \"grievance_type\": \"consent_violation\",\n  \"subject\": \"Consent was not honored\",\n  \"description\": \"My consent preferences were not respected by the fiduciary when accessing my personal data. This is a violation of the DPDP Act provisions.\",\n  \"consent_id\": \"{{consent_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/public/grievance/submit",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "public", "grievance", "submit"]
+            }
+          }
+        },
+        {
+          "name": "List User Grievances (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/public/grievance/{{principal_wallet}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "public", "grievance", "{{principal_wallet}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Breach Management",
+      "item": [
+        {
+          "name": "Create Breach Record",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-API-Key", "value": "{{api_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"breach_type\": \"data_breach\",\n  \"severity\": \"high\",\n  \"description\": \"Unauthorized access to personal data detected during routine security audit. Approximately 500 users affected.\",\n  \"affected_principals_count\": 500,\n  \"data_categories_involved\": [\"identity\", \"contact\", \"financial\"],\n  \"containment_measures\": [\"Access revoked\", \"Password reset\", \"Security patch applied\"],\n  \"third_parties_involved\": [\"CloudProvider Inc\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/breach/create",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "breach", "create"]
+            }
+          }
+        },
+        {
+          "name": "Notify Authority",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "X-API-Key", "value": "{{api_key}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/v1/breach/{{breach_id}}/notify-authority",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "breach", "{{breach_id}}", "notify-authority"]
+            }
+          }
+        },
+        {
+          "name": "Check Breach Deadlines",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "X-API-Key", "value": "{{api_key}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/v1/breach/check-deadlines",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "breach", "check-deadlines"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Data Portability",
+      "item": [
+        {
+          "name": "Export Data",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"format\": \"json\",\n  \"include_audit_logs\": true,\n  \"include_consents\": true,\n  \"include_grievances\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/portability/export",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "portability", "export"]
+            }
+          }
+        },
+        {
+          "name": "Get Export Formats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/portability/formats",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "portability", "formats"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Multi-Tenant",
+      "item": [
+        {
+          "name": "Create Tenant",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Organization\",\n  \"slug\": \"test-org\",\n  \"plan\": \"starter\",\n  \"billing_email\": \"billing@testorg.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/tenant",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "tenant"]
+            }
+          }
+        },
+        {
+          "name": "List Tenants",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/tenant",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "tenant"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Billing & Subscriptions",
+      "item": [
+        {
+          "name": "Create Checkout Session",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"plan\": \"professional\",\n  \"success_url\": \"http://localhost:3000/success\",\n  \"cancel_url\": \"http://localhost:3000/cancel\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/billing/checkout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "billing", "checkout"]
+            }
+          }
+        },
+        {
+          "name": "Get Subscription Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/billing/subscription",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "billing", "subscription"]
+            }
+          }
+        },
+        {
+          "name": "List Plans",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/billing/plans",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "billing", "plans"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Webhooks (API)",
+      "item": [
+        {
+          "name": "Create Webhook Subscription",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-API-Key", "value": "{{api_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"callback_url\": \"https://webhook.site/test-url\",\n  \"events\": [\"consent.granted\", \"consent.revoked\"],\n  \"secret\": \"webhook_secret\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/webhooks/subscribe",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "webhooks", "subscribe"]
+            }
+          }
+        },
+        {
+          "name": "List Webhook Subscriptions",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "X-API-Key", "value": "{{api_key}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/v1/webhooks/subscriptions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "webhooks", "subscriptions"]
+            }
+          }
+        },
+        {
+          "name": "Stripe Webhook Handler",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Stripe-Signature", "value": "<stripe_signature>" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"evt_test\",\n  \"type\": \"invoice.payment_succeeded\",\n  \"data\": {\n    \"object\": {\n      \"id\": \"in_test\"\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/billing/webhook",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "billing", "webhook"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

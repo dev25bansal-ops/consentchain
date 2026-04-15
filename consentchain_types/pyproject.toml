@@ -1,0 +1,15 @@
+[project]
+name = "consentchain-types"
+version = "1.0.0"
+description = "Shared type definitions for ConsentChain"
+authors = [{name = "ConsentChain Team"}]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["pydantic>=2.0.0"]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
